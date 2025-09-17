@@ -1,0 +1,48 @@
+/* styles.css */
+
+body {
+    background-image: url("background.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.linkedin-icon {
+    background-image: url('linkedin.png');
+    width: 18px;
+    height: 18px;
+    background-size: cover;
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.cart-icon {
+    background-image: url('cart_icon.png');
+    width: 30px;
+    height: 30px;
+    background-size: cover;
+}
+
+
+
+.course-image img {
+    max-height: 250px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.course-list .card {
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+/* custom.css */
+.custom-card {
+    margin: 0 auto;
+    max-width: 50%;
+}
+
+
+
+

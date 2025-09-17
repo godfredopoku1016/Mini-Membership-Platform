@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="hero-section text-center mb-5">
+        <h1 class="display-4 text-primary">About MemberHub</h1>
+        <p class="lead">Revolutionizing membership management for organizations worldwide</p>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-6">
+            <h2 class="text-primary">Our Mission</h2>
+            <p>MemberHub was founded with a simple mission: to make membership management seamless, 
+               secure, and scalable. We believe that organizations should focus on their core mission, 
+               not on administrative overhead.</p>
+            <p>Our platform combines cutting-edge technology with user-friendly design to provide 
+               a comprehensive solution for membership management, payment processing, and member engagement.</p>
+        </div>
+        <div class="col-md-6">
+            <h2 class="text-primary">Why Choose Us?</h2>
+            <ul class="list-unstyled">
+                <li class="mb-3"><i class="fas fa-check-circle text-success mr-2"></i> Secure payment processing with Stripe integration</li>
+                <li class="mb-3"><i class="fas fa-check-circle text-success mr-2"></i> Real-time analytics and reporting</li>
+                <li class="mb-3"><i class="fas fa-check-circle text-success mr-2"></i> Multi-currency support</li>
+                <li class="mb-3"><i class="fas fa-check-circle text-success mr-2"></i> Automated billing and renewals</li>
+                <li class="mb-3"><i class="fas fa-check-circle text-success mr-2"></i> Member communication tools</li>
+                <li class="mb-3"><i class="fas fa-check-circle text-success mr-2"></i> 24/7 customer support</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="text-center mb-5">
+        <h2 class="text-primary mb-4">Our Team</h2>
+        <div class="row">
+            <div class="col-md-3 col-6 mb-4">
+                <div class="team-card">
+                    <div class="team-img mb-3">
+                        <i class="fas fa-user-circle fa-4x text-primary"></i>
+                    </div>
+                    <h5>John Smith</h5>
+                    <p class="text-muted">CEO & Founder</p>
+                    <a href="#" class="text-primary"><i class="fab fa-linkedin fa-lg"></i></a>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="team-card">
+                    <div class="team-img mb-3">
+                        <i class="fas fa-user-circle fa-4x text-primary"></i>
+                    </div>
+                    <h5>Sarah Johnson</h5>
+                    <p class="text-muted">CTO</p>
+                    <a href="#" class="text-primary"><i class="fab fa-linkedin fa-lg"></i></a>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="team-card">
+                    <div class="team-img mb-3">
+                        <i class="fas fa-user-circle fa-4x text-primary"></i>
+                    </div>
+                    <h5>Mike Chen</h5>
+                    <p class="text-muted">Lead Developer</p>
+                    <a href="#" class="text-primary"><i class="fab fa-linkedin fa-lg"></i></a>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="team-card">
+                    <div class="team-img mb-3">
+                        <i class="fas fa-user-circle fa-4x text-primary"></i>
+                    </div>
+                    <h5>Emily Davis</h5>
+                    <p class="text-muted">Customer Success</p>
+                    <a href="#" class="text-primary"><i class="fab fa-linkedin fa-lg"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-section bg-light py-5 text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-6 mb-4">
+                    <h3 class="text-primary">500+</h3>
+                    <p class="text-muted">Organizations</p>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <h3 class="text-primary">50K+</h3>
+                    <p class="text-muted">Members</p>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <h3 class="text-primary">$5M+</h3>
+                    <p class="text-muted">Processed</p>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <h3 class="text-primary">99.9%</h3>
+                    <p class="text-muted">Uptime</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .team-card {
+        padding: 20px;
+        border-radius: 10px;
+        transition: transform 0.3s ease;
+    }
+    .team-card:hover {
+        transform: translateY(-5px);
+    }
+    .stats-section h3 {
+        font-weight: bold;
+        margin-bottom: 0;
+    }
+</style>
+{% endblock %}

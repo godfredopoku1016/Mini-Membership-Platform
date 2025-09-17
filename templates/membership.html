@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 class="text-primary">Membership Plans</h1>
+        <p class="lead">Choose the plan that best fits your organization's needs</p>
+    </div>
+
+    <div class="row">
+        <!-- Bronze Plan -->
+        <div class="col-md-4 mb-4">
+            <div class="card membership-card h-100">
+                <div class="card-header bg-bronze text-white text-center py-4">
+                    <h3>Bronze</h3>
+                    <h4 class="display-4">$9.99</h4>
+                    <p class="mb-0">per month</p>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Up to 50 members</li>
+                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Basic analytics</li>
+                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Email support</li>
+                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Payment processing</li>
+                        <li class="mb-2"><i class="fas fa-times text-danger mr-2"></i> Advanced reporting</li>
+                        <li class="mb-2"><i class="fas fa-times text-danger mr-2"></i> Custom branding</li>
+                    </ul>
+                </div>
+                <div class="card-footer text-center">
+                    {% if user.is_authenticated and current_plan == 'bronze' %}
+                        <span class="btn btn-outline-bronze disabled">Current Plan</span>
+                    {% else %}
+                        <a href="{% url 'upgrade_membership' 'bronze' %}" class="btn btn-bronze">Choose Bronze</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Silver Plan -->
+        <div class="col-md-4 mb-4">
+            <div class="card membership-card h-100">
+                <div class="card-header bg-silver text-white text-center py-4">
+                    <h3>Silver</h3>
+                    <h4 class="display-4">$19.99</h4>
+                    <p class="mb-0">per month</p>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Up to 200 members</li>
+                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Advanced analytics</li>
+                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Priority support</li>
+                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Payment processing</li>
+                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Basic reporting</li>
+                        <li class="mb-2"><i class="fas fa-times text-danger mr-2"></i> Custom branding</li>
+                    </ul>
+                </div>
+                <div class="card-footer text-center">
+                    {% if user.is_authenticated and current_plan == 'silver' %}
+                        <span class="btn btn-outline-silver disabled">Current Plan</span>
+                    {% else %}
+                        <a href="{% url 'upgrade_membership' 'silver' %}" class="btn btn-silver">Choose Silver</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Gold Plan -->
+        <div class="col-md-4 mb-4">
+            <div class="card membership-card h-100">
+                <div class="card-header bg-gold text-white text-center py-4">
+                    <h3>Gold</h3>
+                    <h4 class="display-4">$29.99</h4>
+                    <p class="mb-0">per month</p>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Unlimited members</li>
+                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Premium analytics</li>
+                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> 24/7 support</li>
+                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Payment processing</li>
+                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Advanced reporting</li>
+                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Custom branding</li>
+                    </ul>
+                </div>
+                <div class="card-footer text-center">
+                    {% if user.is_authenticated and current_plan == 'gold' %}
+                        <span class="btn btn-outline-gold disabled">Current Plan</span>
+                    {% else %}
+                        <a href="{% url 'upgrade_membership' 'gold' %}" class="btn btn-gold">Choose Gold</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-bronze { background: linear-gradient(135deg, #cd7f32, #8c6b46); }
+    .bg-silver { background: linear-gradient(135deg, #c0c0c0, #a8a8a8); }
+    .bg-gold { background: linear-gradient(135deg, #ffd700, #d4af37); }
+    
+    .btn-bronze { background-color: #cd7f32; border-color: #cd7f32; color: white; }
+    .btn-silver { background-color: #c0c0c0; border-color: #c0c0c0; color: white; }
+    .btn-gold { background-color: #ffd700; border-color: #ffd700; color: white; }
+    
+    .btn-outline-bronze { border-color: #cd7f32; color: #cd7f32; }
+    .btn-outline-silver { border-color: #c0c0c0; color: #c0c0c0; }
+    .btn-outline-gold { border-color: #ffd700; color: #ffd700; }
+    
+    .membership-card { transition: transform 0.3s ease; }
+    .membership-card:hover { transform: translateY(-5px); }
+</style>
+{% endblock %}

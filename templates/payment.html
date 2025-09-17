@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0 text-center">Complete Your Payment</h3>
+                </div>
+                <div class="card-body">
+                    <div class="payment-summary mb-4 p-4 border rounded">
+                        <h5 class="text-center mb-3">Order Summary</h5>
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="mb-1"><strong>Plan:</strong></p>
+                                <p class="mb-1"><strong>Amount:</strong></p>
+                                <p class="mb-1"><strong>Currency:</strong></p>
+                                <p class="mb-0"><strong>Billing Cycle:</strong></p>
+                            </div>
+                            <div class="col-6 text-right">
+                                <p class="mb-1">{{ plan_name|title }} Plan</p>
+                                <p class="mb-1">${{ amount }}</p>
+                                <p class="mb-1">{{ currency }}</p>
+                                <p class="mb-0">Monthly</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if error %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                    {% endif %}
+
+                    <div class="text-center mb-4">
+                        <h5>Secure Payment Processing</h5>
+                        <div class="payment-methods mt-3">
+                            <img src="https://cdn.worldvectorlogo.com/logos/stripe-4.svg" alt="Stripe" height="40" class="mr-3">
+                            <img src="https://cdn.worldvectorlogo.com/logos/visa-2.svg" alt="Visa" height="30" class="mr-2">
+                            <img src="https://cdn.worldvectorlogo.com/logos/mastercard-2.svg" alt="Mastercard" height="30" class="mr-2">
+                            <img src="https://cdn.worldvectorlogo.com/logos/american-express-2.svg" alt="Amex" height="30" class="mr-2">
+                        </div>
+                    </div>
+
+                    <form method="post" id="payment-form">
+                        {% csrf_token %}
+                        
+                        <div class="form-group">
+                            <label for="card-element" class="font-weight-bold">Credit or debit card</label>
+                            <div id="card-element" class="form-control p-3">
+                                <!-- Stripe Card Element will be inserted here -->
+                            </div>
+                            <div id="card-errors" role="alert" class="text-danger mt-2"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email" class="font-weight-bold">Email for receipt</label>
+                            <input type="email" id="email" name="email" class="form-control" 
+                                   value="{{ user.email }}" required>
+                        </div>
+
+                        <div class="form-check mb-4">
+                            <input type="checkbox" class="form-check-input" id="terms" required>
+                            <label class="form-check-label" for="terms">
+                                I agree to the <a href="#" target="_blank">Terms of Service</a> and 
+                                <a href="#" target="_blank">Privacy Policy</a>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg btn-block" id="submit-button">
+                            <i class="fas fa-lock"></i> Pay ${{ amount }}
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <p class="text-muted small">
+                            <i class="fas fa-shield-alt"></i> Your payment information is encrypted and secure.
+                            We never store your card details.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stripe Elements -->
+<script src="https://js.stripe.com/basil/stripe.js"></script>
+<script>
+    var stripe = Stripe('{{ STRIPE_PUBLISHABLE_KEY }}');
+    var elements = stripe.elements();
+    
+    var card = elements.create('card', {
+        style: {
+            base: {
+                fontSize: '16px',
+                color: '#32325d',
+            }
+        }
+    });
+    
+    card.mount('#card-element');
+    
+    card.addEventListener('change', function(event) {
+        var displayError = document.getElementById('card-errors');
+        if (event.error) {
+            displayError.textContent = event.error.message;
+        } else {
+            displayError.textContent = '';
+        }
+    });
+    
+    var form = document.getElementById('payment-form');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        var submitButton = document.getElementById('submit-button');
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+        
+        stripe.createToken(card).then(function(result) {
+            if (result.error) {
+                var errorElement = document.getElementById('card-errors');
+                errorElement.textContent = result.error.message;
+                submitButton.disabled = false;
+                submitButton.innerHTML = '<i class="fas fa-lock"></i> Pay ${{ amount }}';
+            } else {
+                // Add the token to the form and submit
+                var hiddenInput = document.createElement('input');
+                hiddenInput.setAttribute('type', 'hidden');
+                hiddenInput.setAttribute('name', 'stripeToken');
+                hiddenInput.setAttribute('value', result.token.id);
+                form.appendChild(hiddenInput);
+                
+                form.submit();
+            }
+        });
+    });
+</script>
+
+<style>
+    .payment-methods img {
+        filter: grayscale(100%);
+        opacity: 0.7;
+        transition: all 0.3s ease;
+    }
+    .payment-methods img:hover {
+        filter: grayscale(0%);
+        opacity: 1;
+    }
+    #card-element {
+        min-height: 50px;
+    }
+</style>
+{% endblock %}
