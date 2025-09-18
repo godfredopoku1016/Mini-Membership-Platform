@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-danger text-white text-center py-4">
+                    <h2 class="fw-bold mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Cancel Membership</h2>
+                </div>
+                <div class="card-body p-5">
+                    {% if messages %}
+                    <div class="mb-4">
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    {% if user_membership %}
+                    <div class="alert alert-warning">
+                        <h5 class="alert-heading"><i class="fas fa-info-circle me-2"></i>Important Information</h5>
+                        <p class="mb-0">Cancelling your membership will take effect at the end of your current billing period.</p>
+                    </div>
+
+                    <div class="mb-4 p-4 border rounded bg-light">
+                        <h5 class="mb-3">Current Membership Details</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Plan:</strong> {{ user_membership.plan.name }}</p>
+                                <p><strong>Status:</strong> <span class="badge bg-{% if user_membership.status == 'active' %}success{% else %}warning{% endif %}">{{ user_membership.status|title }}</span></p>
+                            </div>
+                            <div class="col-md-6">
+                                {% if user_membership.current_period_end %}
+                                <p><strong>Billing Period Ends:</strong> {{ user_membership.current_period_end|date:"F j, Y" }}</p>
+                                {% endif %}
+                                <p><strong>Price:</strong> ${{ user_membership.plan.price }}/month</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="mb-3">What happens when you cancel?</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex align-items-center">
+                                <i class="fas fa-check text-success me-3"></i>
+                                <span>You'll retain access until the end of your current billing period</span>
+                            </li>
+                            <li class="list-group-item d-flex align-items-center">
+                                <i class="fas fa-check text-success me-3"></i>
+                                <span>No further charges will be made to your account</span>
+                            </li>
+                            <li class="list-group-item d-flex align-items-center">
+                                <i class="fas fa-times text-danger me-3"></i>
+                                <span>You'll lose access to premium features after the billing period ends</span>
+                            </li>
+                            <li class="list-group-item d-flex align-items-center">
+                                <i class="fas fa-times text-danger me-3"></i>
+                                <span>Your member directory listing will be removed</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="confirmCancel" required>
+                            <label class="form-check-label" for="confirmCancel">
+                                I understand that my membership will be cancelled at the end of the current billing period and I will lose access to premium features.
+                            </label>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'dashboard' %}" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-ban me-2"></i>Confirm Cancellation
+                            </button>
+                        </div>
+                    </form>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-info-circle fa-3x text-muted mb-3"></i>
+                        <h4>No Active Membership</h4>
+                        <p class="text-muted">You don't have an active membership to cancel.</p>
+                        <a href="{% url 'membership_plans' %}" class="btn btn-primary">
+                            <i class="fas fa-crown me-2"></i>View Membership Plans
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
