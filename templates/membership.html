@@ -1,93 +1,188 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container py-5">
     <div class="text-center mb-5">
-        <h1 class="text-primary">Membership Plans</h1>
-        <p class="lead">Choose the plan that best fits your organization's needs</p>
+        <h1 class="display-4 fw-bold text-primary mb-3">Membership Plans</h1>
+        <p class="lead text-muted">Choose the perfect plan for your organization's needs</p>
+        <div class="d-flex justify-content-center align-items-center mt-4">
+            <span class="me-2">Billed Monthly</span>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="billingToggle" style="width: 2.5rem; height: 1.25rem;">
+                <label class="form-check-label ms-2" for="billingToggle">Billed Annually (Save 20%)</label>
+            </div>
+        </div>
     </div>
 
-    <div class="row">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
         <!-- Bronze Plan -->
-        <div class="col-md-4 mb-4">
-            <div class="card membership-card h-100">
-                <div class="card-header bg-bronze text-white text-center py-4">
-                    <h3>Bronze</h3>
-                    <h4 class="display-4">$9.99</h4>
-                    <p class="mb-0">per month</p>
+        <div class="col">
+            <div class="card membership-card h-100 border-0 shadow-lg overflow-hidden">
+                <div class="card-header position-relative py-4 bg-bronze text-white text-center">
+                    <div class="position-absolute top-0 end-0 bg-dark px-3 py-1 small fw-bold">MOST AFFORDABLE</div>
+                    <h3 class="fw-bold mb-1">Bronze</h3>
+                    <div class="price-display">
+                        <h4 class="display-4 fw-bold mb-0">$9<span class="fs-3">.99</span></h4>
+                        <p class="mb-0 opacity-75">per month</p>
+                    </div>
+                    <div class="annual-price d-none">
+                        <h4 class="display-4 fw-bold mb-0">$95<span class="fs-3">.99</span></h4>
+                        <p class="mb-0 opacity-75">per year</p>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Up to 50 members</li>
-                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Basic analytics</li>
-                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Email support</li>
-                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Payment processing</li>
-                        <li class="mb-2"><i class="fas fa-times text-danger mr-2"></i> Advanced reporting</li>
-                        <li class="mb-2"><i class="fas fa-times text-danger mr-2"></i> Custom branding</li>
+                <div class="card-body py-4">
+                    <ul class="list-unstyled mb-4">
+                        <li class="mb-3 d-flex align-items-start">
+                            <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                            <span>Up to 50 members</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-start">
+                            <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                            <span>Basic analytics dashboard</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-start">
+                            <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                            <span>Email support with 48h response</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-start">
+                            <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                            <span>Secure payment processing</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-start text-muted">
+                            <i class="fas fa-times-circle me-2 mt-1"></i>
+                            <span>Advanced reporting tools</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-start text-muted">
+                            <i class="fas fa-times-circle me-2 mt-1"></i>
+                            <span>Custom branding options</span>
+                        </li>
                     </ul>
                 </div>
-                <div class="card-footer text-center">
+                <div class="card-footer bg-transparent border-0 pb-4 pt-0 text-center">
                     {% if user.is_authenticated and current_plan == 'bronze' %}
-                        <span class="btn btn-outline-bronze disabled">Current Plan</span>
+                        <span class="btn btn-lg btn-outline-bronze rounded-pill px-4 disabled">Current Plan</span>
                     {% else %}
-                        <a href="{% url 'upgrade_membership' 'bronze' %}" class="btn btn-bronze">Choose Bronze</a>
+                        <a href="{% url 'upgrade_membership' 'bronze' %}" class="btn btn-lg btn-bronze rounded-pill px-4 shadow-sm">Get Started</a>
                     {% endif %}
                 </div>
             </div>
         </div>
 
         <!-- Silver Plan -->
-        <div class="col-md-4 mb-4">
-            <div class="card membership-card h-100">
-                <div class="card-header bg-silver text-white text-center py-4">
-                    <h3>Silver</h3>
-                    <h4 class="display-4">$19.99</h4>
-                    <p class="mb-0">per month</p>
+        <div class="col">
+            <div class="card membership-card h-100 border-0 shadow-lg overflow-hidden position-relative">
+                <div class="position-absolute top-0 start-50 translate-middle mt-2">
+                    <span class="badge bg-primary rounded-pill px-3 py-2 shadow">POPULAR CHOICE</span>
                 </div>
-                <div class="card-body">
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Up to 200 members</li>
-                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Advanced analytics</li>
-                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Priority support</li>
-                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Payment processing</li>
-                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Basic reporting</li>
-                        <li class="mb-2"><i class="fas fa-times text-danger mr-2"></i> Custom branding</li>
+                <div class="card-header py-4 bg-silver text-white text-center">
+                    <h3 class="fw-bold mb-1">Silver</h3>
+                    <div class="price-display">
+                        <h4 class="display-4 fw-bold mb-0">$19<span class="fs-3">.99</span></h4>
+                        <p class="mb-0 opacity-75">per month</p>
+                    </div>
+                    <div class="annual-price d-none">
+                        <h4 class="display-4 fw-bold mb-0">$190<span class="fs-3">.99</span></h4>
+                        <p class="mb-0 opacity-75">per year</p>
+                    </div>
+                </div>
+                <div class="card-body py-4">
+                    <ul class="list-unstyled mb-4">
+                        <li class="mb-3 d-flex align-items-start">
+                            <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                            <span>Up to 200 members</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-start">
+                            <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                            <span>Advanced analytics with insights</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-start">
+                            <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                            <span>Priority support with 24h response</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-start">
+                            <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                            <span>Secure payment processing</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-start">
+                            <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                            <span>Basic reporting tools</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-start text-muted">
+                            <i class="fas fa-times-circle me-2 mt-1"></i>
+                            <span>Custom branding options</span>
+                        </li>
                     </ul>
                 </div>
-                <div class="card-footer text-center">
+                <div class="card-footer bg-transparent border-0 pb-4 pt-0 text-center">
                     {% if user.is_authenticated and current_plan == 'silver' %}
-                        <span class="btn btn-outline-silver disabled">Current Plan</span>
+                        <span class="btn btn-lg btn-outline-silver rounded-pill px-4 disabled">Current Plan</span>
                     {% else %}
-                        <a href="{% url 'upgrade_membership' 'silver' %}" class="btn btn-silver">Choose Silver</a>
+                        <a href="{% url 'upgrade_membership' 'silver' %}" class="btn btn-lg btn-silver rounded-pill px-4 shadow-sm">Get Started</a>
                     {% endif %}
                 </div>
             </div>
         </div>
 
         <!-- Gold Plan -->
-        <div class="col-md-4 mb-4">
-            <div class="card membership-card h-100">
-                <div class="card-header bg-gold text-white text-center py-4">
-                    <h3>Gold</h3>
-                    <h4 class="display-4">$29.99</h4>
-                    <p class="mb-0">per month</p>
+        <div class="col">
+            <div class="card membership-card h-100 border-0 shadow-lg overflow-hidden">
+                <div class="card-header py-4 bg-gold text-white text-center">
+                    <h3 class="fw-bold mb-1">Gold</h3>
+                    <div class="price-display">
+                        <h4 class="display-4 fw-bold mb-0">$29<span class="fs-3">.99</span></h4>
+                        <p class="mb-0 opacity-75">per month</p>
+                    </div>
+                    <div class="annual-price d-none">
+                        <h4 class="display-4 fw-bold mb-0">$285<span class="fs-3">.99</span></h4>
+                        <p class="mb-0 opacity-75">per year</p>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Unlimited members</li>
-                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Premium analytics</li>
-                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> 24/7 support</li>
-                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Payment processing</li>
-                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Advanced reporting</li>
-                        <li class="mb-2"><i class="fas fa-check text-success mr-2"></i> Custom branding</li>
+                <div class="card-body py-4">
+                    <ul class="list-unstyled mb-4">
+                        <li class="mb-3 d-flex align-items-start">
+                            <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                            <span>Unlimited members</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-start">
+                            <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                            <span>Premium analytics with AI insights</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-start">
+                            <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                            <span>24/7 dedicated support</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-start">
+                            <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                            <span>Secure payment processing</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-start">
+                            <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                            <span>Advanced custom reporting</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-start">
+                            <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                            <span>Full custom branding options</span>
+                        </li>
                     </ul>
                 </div>
-                <div class="card-footer text-center">
+                <div class="card-footer bg-transparent border-0 pb-4 pt-0 text-center">
                     {% if user.is_authenticated and current_plan == 'gold' %}
-                        <span class="btn btn-outline-gold disabled">Current Plan</span>
+                        <span class="btn btn-lg btn-outline-gold rounded-pill px-4 disabled">Current Plan</span>
                     {% else %}
-                        <a href="{% url 'upgrade_membership' 'gold' %}" class="btn btn-gold">Choose Gold</a>
+                        <a href="{% url 'upgrade_membership' 'gold' %}" class="btn btn-lg btn-gold rounded-pill px-4 shadow-sm">Get Started</a>
                     {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card border-0 bg-light">
+                <div class="card-body text-center p-4">
+                    <h3 class="mb-3">Need a custom solution?</h3>
+                    <p class="text-muted mb-3">We offer enterprise plans with custom features and pricing for larger organizations.</p>
+                    <a href="#" class="btn btn-outline-primary">Contact Sales</a>
                 </div>
             </div>
         </div>
@@ -95,19 +190,92 @@
 </div>
 
 <style>
-    .bg-bronze { background: linear-gradient(135deg, #cd7f32, #8c6b46); }
-    .bg-silver { background: linear-gradient(135deg, #c0c0c0, #a8a8a8); }
-    .bg-gold { background: linear-gradient(135deg, #ffd700, #d4af37); }
+    .bg-bronze { 
+        background: linear-gradient(135deg, #cd7f32 0%, #8c6b46 100%); 
+    }
+    .bg-silver { 
+        background: linear-gradient(135deg, #c0c0c0 0%, #a8a8a8 100%); 
+    }
+    .bg-gold { 
+        background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%); 
+    }
     
-    .btn-bronze { background-color: #cd7f32; border-color: #cd7f32; color: white; }
-    .btn-silver { background-color: #c0c0c0; border-color: #c0c0c0; color: white; }
-    .btn-gold { background-color: #ffd700; border-color: #ffd700; color: white; }
+    .btn-bronze { 
+        background-color: #cd7f32; 
+        border-color: #cd7f32; 
+        color: white; 
+    }
+    .btn-bronze:hover {
+        background-color: #b36923;
+        border-color: #b36923;
+        color: white;
+    }
     
-    .btn-outline-bronze { border-color: #cd7f32; color: #cd7f32; }
-    .btn-outline-silver { border-color: #c0c0c0; color: #c0c0c0; }
-    .btn-outline-gold { border-color: #ffd700; color: #ffd700; }
+    .btn-silver { 
+        background-color: #c0c0c0; 
+        border-color: #c0c0c0; 
+        color: white; 
+    }
+    .btn-silver:hover {
+        background-color: #a8a8a8;
+        border-color: #a8a8a8;
+        color: white;
+    }
     
-    .membership-card { transition: transform 0.3s ease; }
-    .membership-card:hover { transform: translateY(-5px); }
+    .btn-gold { 
+        background-color: #ffd700; 
+        border-color: #ffd700; 
+        color: white; 
+    }
+    .btn-gold:hover {
+        background-color: #e6c300;
+        border-color: #e6c300;
+        color: white;
+    }
+    
+    .btn-outline-bronze { 
+        border: 2px solid #cd7f32; 
+        color: #cd7f32; 
+    }
+    .btn-outline-silver { 
+        border: 2px solid #c0c0c0; 
+        color: #c0c0c0; 
+    }
+    .btn-outline-gold { 
+        border: 2px solid #ffd700; 
+        color: #ffd700; 
+    }
+    
+    .membership-card { 
+        transition: transform 0.3s ease, box-shadow 0.3s ease; 
+        border-radius: 1rem;
+    }
+    .membership-card:hover { 
+        transform: translateY(-10px); 
+        box-shadow: 0 1rem 3rem rgba(0,0,0,0.175) !important;
+    }
+    
+    .card-header {
+        border-top-left-radius: 1rem !important;
+        border-top-right-radius: 1rem !important;
+    }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const billingToggle = document.getElementById('billingToggle');
+        const monthlyPrices = document.querySelectorAll('.price-display');
+        const annualPrices = document.querySelectorAll('.annual-price');
+        
+        billingToggle.addEventListener('change', function() {
+            if (this.checked) {
+                monthlyPrices.forEach(el => el.classList.add('d-none'));
+                annualPrices.forEach(el => el.classList.remove('d-none'));
+            } else {
+                monthlyPrices.forEach(el => el.classList.remove('d-none'));
+                annualPrices.forEach(el => el.classList.add('d-none'));
+            }
+        });
+    });
+</script>
 {% endblock %}

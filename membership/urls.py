@@ -33,7 +33,13 @@ urlpatterns = [
     path('membership/cancel/', views.cancel_membership, name='cancel_membership'),
     
     # Admin URLs (Protected)
-    path('admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path('admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),     
+        # Association features
+    path('directory/', views.member_directory, name='member_directory'),
+    path('events/', views.industry_events, name='industry_events'),
+    path('events/<int:event_id>/register/', views.event_registration, name='event_registration'),
+    path('certifications/', views.certification_programs, name='certification_programs'),
+    # path('profile/professional/', views.professional_profile, name='professional_profile'),                                           
 ]
 
 # Serve media files in development

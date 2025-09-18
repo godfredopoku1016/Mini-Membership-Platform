@@ -1,3 +1,4 @@
+from datetime import timezone
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -14,13 +15,13 @@ import stripe
 import random
 from decimal import Decimal
 import uuid
-
+from datetime import datetime
 from .forms import (
     UserRegistrationForm, UserProfileForm, MembershipUpgradeForm,
     PaymentForm, ContactForm, PasswordResetForm, ConfirmCodeForm, NewPasswordForm
 )
 from .models import (
-    MembershipPlan, UserMembership, Payment, UserProfile,
+    CertificationProgram, IndustryEvent, MemberDirectory, MembershipPlan, UserMembership, Payment, UserProfile,
     ActivityLog, Notification, SystemSetting, User
 )
 
@@ -158,7 +159,7 @@ def register_view(request):
                     free_plan = MembershipPlan.objects.filter(tier='free', is_active=True).first()
                     if free_plan:
                         UserMembership.objects.create(
-                            user=user,
+                                                                                                                                                                                          user=user,
                             plan=free_plan,
                             status='active'
                         )
@@ -358,48 +359,39 @@ def profile(request):
     })
 @login_required
 def membership_plans(request):
-    """View available membership plans"""
+    """View all active membership plans"""
+    # Get all active plans
+    all_active_plans = MembershipPlan.objects.filter(is_active=True)
+    
+    # Get user's current plan tier if they have one
+    current_plan_tier = None
     try:
-        current_membership = UserMembership.objects.get(user=request.user)
-        available_plans = MembershipPlan.objects.filter(
-            is_active=True
-        ).exclude(tier=current_membership.plan.tier)
+        user_membership = UserMembership.objects.get(user=request.user)
+        if user_membership.plan:
+            current_plan_tier = user_membership.plan.tier
     except UserMembership.DoesNotExist:
-        current_membership = None
-        available_plans = MembershipPlan.objects.filter(is_active=True)
+        pass
     
     context = {
-        'current_membership': current_membership,
-        'available_plans': available_plans,
+        'current_plan': current_plan_tier,
+        'available_plans': all_active_plans,  # Show ALL active plans
     }
     return render(request, 'membership.html', context)
-
 @login_required
 def upgrade_membership(request, tier):
-    """Handle membership upgrade requests - accessible to ALL authenticated users"""
-    # REMOVE ANY restrictive checks like:
-    # if not is_member(request.user):
-    #     messages.error(request, 'Access restricted to members.')
-    #     return redirect('homepage')
-    
-    # Validate tier
-    valid_tiers = ['bronze', 'silver', 'gold']
-    if tier not in valid_tiers:
-        messages.error(request, 'Invalid membership tier.')
-        return redirect('membership_plans')
-    
+    """Handle membership upgrade requests"""
     try:
-        # Get the membership plan
+        # Get the membership plan (this validates the tier exists and is active)
         membership_plan = MembershipPlan.objects.get(tier=tier, is_active=True)
         
-        # Check if user already has this plan (optional, for user experience)
+        # Check if user already has this plan
         try:
             user_membership = UserMembership.objects.get(user=request.user)
-            if user_membership.plan.tier == tier:
+            if user_membership.plan and user_membership.plan.tier == tier:
                 messages.info(request, f'You already have the {tier} membership.')
                 return redirect('membership_plans')
         except UserMembership.DoesNotExist:
-            # User doesn't have a membership yet - that's fine, they can upgrade
+            # User doesn't have a membership yet - that's fine
             pass
         
         # Redirect to currency selection
@@ -604,3 +596,62 @@ def handler403(request, exception):
 
 def handler400(request, exception):
     return render(request, '400.html', status=400)
+
+
+# views.py - Add these new views
+@login_required
+def member_directory(request):
+    """Searchable member directory"""
+    search_query = request.GET.get('q', '')
+    industry_filter = request.GET.get('industry', '')
+    
+    members = MemberDirectory.objects.filter(
+        is_public=True, 
+        verification_status='verified'
+    ).select_related('user')
+    
+    if search_query:
+        members = members.filter(
+            Q(user__first_name__icontains=search_query) |
+            Q(user__last_name__icontains=search_query) |
+            Q(job_title__icontains=search_query) |
+            Q(company__icontains=search_query) |
+            Q(expertise__icontains=search_query)
+        )
+    
+    if industry_filter:
+        members = members.filter(association__industry=industry_filter)
+    
+    return render(request, 'member_directory.html', {
+        'members': members,
+        'search_query': search_query
+    })
+
+@login_required
+def industry_events(request):
+    """Upcoming industry events"""
+    events = IndustryEvent.objects.filter(
+        end_date__gte=datetime.now()
+    ).order_by('start_date')
+    
+    return render(request, 'industry_events.html', {'events': events})
+
+@login_required
+def certification_programs(request):
+    """Available certification programs"""
+    certifications = CertificationProgram.objects.filter(is_active=True)
+    return render(request, 'certification_programs.html', {'certifications': certifications})
+
+@login_required
+def event_registration(request, event_id):
+    """Register for an event"""
+    event = get_object_or_404(IndustryEvent, id=event_id)
+    
+    if request.method == 'POST':
+        # Handle event registration and payment
+        # Create registration record
+        # Process payment if event has fee
+        messages.success(request, f'Successfully registered for {event.title}!')
+        return redirect('industry_events')
+    
+    return render(request, 'event_registration.html', {'event': event})

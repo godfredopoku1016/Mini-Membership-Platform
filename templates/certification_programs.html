@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Professional Certifications</h1>
+    
+    <div class="row">
+        {% for certification in certifications %}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">{{ certification.name }}</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ certification.description }}</p>
+                    
+                    <h6>Requirements:</h6>
+                    <p class="text-muted">{{ certification.requirements }}</p>
+                    
+                    <div class="certification-details">
+                        <p><strong>Exam Fee:</strong> ${{ certification.exam_fee }}</p>
+                        <p><strong>Validity:</strong> {{ certification.validity_period }} months</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="btn btn-success">Apply for Certification</a>
+                    <small class="text-muted ms-3">{% if certification.is_active %}Open for Applications{% else %}Applications Closed{% endif %}</small>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                <h4>No certification programs available</h4>
+                <p>New certification programs will be announced soon.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}    

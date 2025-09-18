@@ -237,3 +237,55 @@ class SystemSetting(models.Model):
 
     def __str__(self):
         return self.key
+
+
+# models.py - Add these new models
+class ProfessionalAssociation(models.Model):
+    """Main association/organization"""
+    name = models.CharField(max_length=200)
+    description = models.TextField()
+    industry = models.CharField(max_length=100)
+    website = models.URLField(blank=True)
+    logo = models.ImageField(upload_to='association_logos/', blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class MemberDirectory(models.Model):
+    """Enhanced member profiles for directory"""
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    association = models.ForeignKey(ProfessionalAssociation, on_delete=models.CASCADE)
+    job_title = models.CharField(max_length=100)
+    company = models.CharField(max_length=100)
+    expertise = models.CharField(max_length=200, help_text="Comma-separated skills/expertise")
+    biography = models.TextField(blank=True)
+    linkedin_url = models.URLField(blank=True)
+    is_public = models.BooleanField(default=True)
+    verification_status = models.CharField(max_length=20, choices=[
+        ('pending', 'Pending'), ('verified', 'Verified'), ('rejected', 'Rejected')
+    ], default='pending')
+
+class IndustryEvent(models.Model):
+    """Conference, webinar, workshop management"""
+    association = models.ForeignKey(ProfessionalAssociation, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    event_type = models.CharField(max_length=20, choices=[
+        ('conference', 'Conference'), ('webinar', 'Webinar'), ('workshop', 'Workshop')
+    ])
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    is_virtual = models.BooleanField(default=False)
+    location = models.CharField(max_length=200, blank=True)
+    meeting_url = models.URLField(blank=True)
+    max_attendees = models.IntegerField(default=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+
+class CertificationProgram(models.Model):
+    """Professional certification programs"""
+    association = models.ForeignKey(ProfessionalAssociation, on_delete=models.CASCADE)
+    name = models.CharField(max_length=200)
+    description = models.TextField()
+    requirements = models.TextField()
+    exam_fee = models.DecimalField(max_digits=10, decimal_places=2)
+    validity_period = models.IntegerField(help_text="Validity in months")  # 24 months for example
+    is_active = models.BooleanField(default=True)
